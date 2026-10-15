@@ -1,8 +1,8 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
-import { rmSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { rmSync, existsSync, mkdirSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { createDatabase } from '../src/db/index.ts';
 import { seedDatabase } from '../src/db/seed.ts';
 import {
@@ -117,6 +117,7 @@ describe('入库品类（10 大类 + 保留子分类）', () => {
     // 临时库放在项目 work/ 目录（测试从 backend/ 运行，因此上跳一级）。
     const file = join(process.cwd(), '..', 'work', 'tmp-taxonomy-old.sqlite');
     try {
+      mkdirSync(dirname(file), { recursive: true });
       for (const suffix of ['', '-wal', '-shm']) {
         const path = `${file}${suffix}`;
         if (existsSync(path)) rmSync(path, { force: true });
