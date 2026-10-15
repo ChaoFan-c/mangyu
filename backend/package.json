@@ -1,0 +1,23 @@
+{
+  "name": "@daoye/backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "忙鱼后端：node:http + node:sqlite（零第三方运行时依赖）",
+  "scripts": {
+    "dev": "node --watch src/main.ts",
+    "start": "node src/main.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --test test/*.test.ts",
+    "db:seed": "node src/db/seed-cli.ts",
+    "db:reset": "node src/db/seed-cli.ts --reset"
+  },
+  "dependencies": {
+    "@daoye/shared": "workspace:*",
+    "playwright": "^1.64.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "typescript": "^5.5.4"
+  }
+}

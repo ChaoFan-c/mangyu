@@ -1,0 +1,9 @@
+packages:
+  - frontend
+  - backend
+  - shared
+
+# pnpm 11 起依赖构建授权配置从 package.json 移到这里。
+# vite 依赖 esbuild 的安装脚本生成平台二进制，必须显式放行，否则安装以非零码退出。
+allowBuilds:
+  esbuild: true

@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.1
+          cache: pnpm
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Unit tests
+        run: pnpm test
+      - name: Production build
+        run: pnpm build
+      - name: Parse PowerShell scripts
+        shell: pwsh
+        run: |
+          $failed = $false
+          Get-ChildItem scripts -Filter *.ps1 | ForEach-Object {
+            $tokens = $null
+            $errors = $null
+            [Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count) { $errors | ForEach-Object { Write-Error "$($_.Extent.File): $($_.Message)" }; $failed = $true }
+          }
+          if ($failed) { exit 1 }
+      - name: Build and verify release archive
+        shell: pwsh
+        run: |
+          ./scripts/package-release.ps1 -Version v0.1.0 -Architecture x64
+          ./scripts/package-release.ps1 -Version v0.1.0 -Architecture arm64
+          Get-ChildItem 'outputs/releases/v0.1.0/*.zip' | ForEach-Object {
+            $expected = ((Get-Content "$($_.FullName).sha256" -Raw) -split '\s+')[0]
+            $actual = (Get-FileHash $_.FullName -Algorithm SHA256).Hash
+            if (-not $actual.Equals($expected, [StringComparison]::OrdinalIgnoreCase)) { throw "Release checksum mismatch: $($_.Name)" }
+          }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mangyu-v0.1.0-win-x64
+          path: |
+            outputs/releases/v0.1.0/*.zip
+            outputs/releases/v0.1.0/*.sha256

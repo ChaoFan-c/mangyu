@@ -1,0 +1,34 @@
+{
+  "name": "daoye-radar",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "description": "忙鱼 - 二手商品行情分析、智能比价、风险评估与利润测算工具",
+  "engines": {
+    "node": ">=24.14.1 <25"
+  },
+  "scripts": {
+    "dev:web": "pnpm --filter frontend dev",
+    "dev:api": "pnpm --filter @daoye/backend dev",
+    "start:api": "pnpm --filter @daoye/backend start",
+    "db:seed": "pnpm --filter @daoye/backend db:seed",
+    "db:reset": "pnpm --filter @daoye/backend db:reset",
+    "build": "pnpm --filter frontend build",
+    "release:package": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-release.ps1",
+    "test": "pnpm --filter frontend test && pnpm --filter @daoye/backend test",
+    "test:web": "pnpm --filter frontend test",
+    "test:api": "pnpm --filter @daoye/backend test",
+    "typecheck": "pnpm --filter shared typecheck && pnpm --filter frontend typecheck && pnpm --filter @daoye/backend typecheck",
+    "lint": "pnpm --filter frontend lint",
+    "check:smoke": "node work/smoke.mjs",
+    "check:import": "node work/verify-import.ts",
+    "check:api": "node work/api-check.ts",
+    "check:browser-routes": "node work/verify-browser-routes.ts",
+    "check:browser": "node work/verify-browser-collector.mjs"
+  },
+  "packageManager": "pnpm@11.25.0",
+  "dependencies": {
+    "playwright": "^1.64.0"
+  }
+}

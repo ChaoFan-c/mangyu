@@ -1,0 +1,286 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   忙鱼 · 设计令牌
+   颜色、圆角与阴影只有一份定义，组件类与工具类都从这里取值。
+------------------------------------------------------------------ */
+:root {
+  --brand-400: #ffe34d;
+  --brand-500: #ffc928;
+  --ink-900: #202124;
+  --ink-500: #6b7280;
+  --line: #e5e7eb;
+  --line-strong: #d8dbdf;
+  --canvas: #f6f7f9;
+  --ring-focus: rgba(255, 201, 40, 0.45);
+}
+
+@layer base {
+  html {
+    background-color: var(--canvas);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink-900);
+    font-family: theme('fontFamily.sans');
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  b,
+  strong {
+    font-weight: 600;
+  }
+
+  ::selection {
+    background-color: #ffec9e;
+    color: var(--ink-900);
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--brand-500);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  th {
+    font-weight: 500;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d8dbdf;
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b9bec4;
+  background-clip: content-box;
+}
+
+@layer components {
+  /* 内容容器：白底、细边框、克制阴影，不在卡片里再套卡片。 */
+  .panel {
+    @apply rounded-xl border border-gray-200 bg-white shadow-card;
+  }
+
+  .panel-hd {
+    @apply flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-5 py-3.5;
+  }
+
+  .panel-title {
+    @apply flex items-center gap-2 text-sm font-semibold text-ink-900;
+  }
+
+  /* 表单控件：统一高度、边框与聚焦反馈。 */
+  .field {
+    @apply w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-ink-900 transition
+      placeholder:text-ink-400 hover:border-gray-400
+      focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-400/25
+      disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-ink-400;
+  }
+
+  .field-compact {
+    @apply px-2.5 py-1.5 text-xs;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-medium text-ink-600;
+  }
+
+  .hint {
+    @apply text-xs leading-relaxed text-ink-500;
+  }
+
+  /* 按钮：统一尺寸与状态，主按钮用品牌黄 + 深色文字。 */
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 py-2
+      text-sm font-medium transition duration-150 ease-out
+      disabled:cursor-not-allowed disabled:opacity-45;
+  }
+
+  .btn-primary {
+    @apply bg-brand-400 text-ink-900 shadow-sm hover:bg-brand-500 active:bg-brand-600
+      disabled:hover:bg-brand-400 disabled:active:bg-brand-400;
+  }
+
+  .btn-secondary {
+    @apply border border-gray-300 bg-white text-ink-700 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100;
+  }
+
+  .btn-ghost {
+    @apply text-ink-600 hover:bg-gray-100 hover:text-ink-900;
+  }
+
+  .btn-quiet-danger {
+    @apply border border-red-200 bg-white text-red-600 hover:bg-red-50 active:bg-red-100;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  /* 分段控件：替代两个互相切换的实心按钮。 */
+  .seg {
+    @apply inline-flex items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-100 p-0.5;
+  }
+
+  .seg-item {
+    @apply inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm text-ink-600 transition
+      duration-150 hover:text-ink-900;
+  }
+
+  .seg-item-active {
+    @apply bg-white font-medium text-ink-900 shadow-sm;
+  }
+
+  /* 筛选胶囊。 */
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1.5
+      text-xs font-medium text-ink-600 transition duration-150 hover:border-gray-300 hover:text-ink-900;
+  }
+
+  .chip-active {
+    @apply border-brand-300 bg-brand-50 text-brand-900 hover:border-brand-400;
+  }
+
+  /* 徽章：文字语义在前，颜色只是辅助。 */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-2xs font-medium ring-1 ring-inset;
+  }
+
+  .badge-neutral {
+    @apply bg-gray-100 text-ink-600 ring-gray-200;
+  }
+
+  .badge-brand {
+    @apply bg-brand-50 text-brand-800 ring-brand-200;
+  }
+
+  /* 统计数字：等宽数字，避免刷新时数字跳动。 */
+  .stat-value {
+    @apply tabular-nums text-2xl font-semibold tracking-tight text-ink-900;
+  }
+
+  /* 侧边导航项。 */
+  .nav-item {
+    @apply relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-ink-600
+      transition duration-150 hover:bg-gray-100 hover:text-ink-900;
+  }
+
+  .nav-item-active {
+    @apply bg-brand-50 text-ink-900 hover:bg-brand-50;
+  }
+
+  .empty-state {
+    @apply flex flex-col items-center justify-center gap-1 px-6 py-14 text-center;
+  }
+
+  /* 表格：表头轻、行分隔细、数字右对齐。 */
+  .table-head {
+    @apply bg-gray-50 text-2xs font-medium uppercase tracking-wide text-ink-500;
+  }
+
+  .table-row {
+    @apply border-t border-gray-100 transition-colors hover:bg-gray-50/80;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded bg-gray-200/80;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.18s ease-out;
+}
+
+/* 长标题截断 */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
