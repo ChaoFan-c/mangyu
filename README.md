@@ -8,7 +8,7 @@
 
 支持 Windows 10/11 x64、arm64，安装器会在当前用户目录准备固定版本的 Node.js、pnpm、依赖和 Playwright Chromium，不要求预装 Git、Docker、Node.js、pnpm 或 SQLite，也不会修改系统 PATH。
 
-仓库尚未发布，下面的地址会在首个 Release 创建后生效；当前仍**不可执行**：
+一件部署指令：
 
 ```powershell
 irm https://raw.githubusercontent.com/ChaoFan-c/mangyu/v0.1.0/scripts/install.ps1 | iex
